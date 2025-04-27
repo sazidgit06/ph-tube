@@ -42,18 +42,25 @@ const displayVideos = (videos) => {
         const div = document.createElement('div');
         div.classList.add('card');
         div.innerHTML = `
-        <figure>
-        <img
-          src=${video.thumbnail}
-          alt="Shoes" />
-      </figure>
-      <div class="card-body">
-        <h2 class="card-title">Card Title</h2>
-        <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
-        <div class="card-actions justify-end">
-          <button class="btn btn-primary">Buy Now</button>
+        <figure class="h-[200px]">
+            <img
+                src=${video.thumbnail}
+                class="h-full w-full object-cover"
+                alt="Shoes" />
+        </figure>
+        <div class="px-0 py-2 flex gap-2">
+            <div>
+                <img src=${video.authors[0].profile_picture} class="h-10 w-10 rounded-full object-cover" />
+            </div>
+            <div>
+                <h2 class="font-bold">${video.title}</h2>
+                <div class="flex gap-2 items-center">
+                    <p class="text-gray-400">${video.authors[0].profile_name}</p>
+                    ${video.authors[0].verified === true ? `<img src="https://img.icons8.com/fluency/48/instagram-check-mark.png" class="w-5"/>` : ""}
+                </div>
+                <p></p>
+            </div>
         </div>
-      </div>
         `
         videoContainer.append(div);
     }
