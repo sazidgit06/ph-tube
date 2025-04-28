@@ -34,6 +34,15 @@ const displayCategory = (data) => {
     }
 }
 
+// time calculation
+
+const time = (num) => {
+    const hour = parseInt(num / 3600);
+    const rem = num % 3600;
+    const minute = parseInt(rem / 60);
+    return `${hour} hrs ${minute} min ago`
+}
+
 // display videos
 const displayVideos = (videos) => {
     const videoContainer = document.getElementById('videos');
@@ -42,11 +51,16 @@ const displayVideos = (videos) => {
         const div = document.createElement('div');
         div.classList.add('card');
         div.innerHTML = `
-        <figure class="h-[200px]">
+        <figure class="h-[200px] relative">
             <img
                 src=${video.thumbnail}
                 class="h-full w-full object-cover"
                 alt="Shoes" />
+
+                ${
+                    video.others.posted_date?.length === 0 ? "" : `<span class="absolute right-2 bottom-2 bg-black text-white rounded p-1 text-xs">${time(video.others.posted_date)}</span>`
+                }
+         
         </figure>
         <div class="px-0 py-2 flex gap-2">
             <div>
