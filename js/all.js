@@ -21,16 +21,25 @@ const loadVideos = () => {
     }
 }
 
+// loadbsedoncategory
+const loadbsedoncategory = (id) => {
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
+    .then(res => res.json())
+    .then(data => displayVideos(data.category))
+}
+
 // categories
 const displayCategory = (data) => {
     // console.log(data);
     const categoryContainer = document.getElementById('category');
     for (const cat of data) {
         // console.log(cat.category);
-        const btn = document.createElement('btn');
-        btn.classList.add('btn');
-        btn.innerText = cat.category;
-        categoryContainer.appendChild(btn);
+        const buttoncontainer = document.createElement('div');
+        buttoncontainer.innerHTML = 
+        `
+            <button onclick="loadbsedoncategory(${cat.category_id})" class="btn">${cat.category}</button>
+        `
+        categoryContainer.appendChild(buttoncontainer);
     }
 }
 
@@ -46,6 +55,7 @@ const time = (num) => {
 // display videos
 const displayVideos = (videos) => {
     const videoContainer = document.getElementById('videos');
+    videoContainer.innerHTML = ""
     for (const video of videos) {
         console.log(video);
         const div = document.createElement('div');
@@ -72,7 +82,7 @@ const displayVideos = (videos) => {
                     <p class="text-gray-400">${video.authors[0].profile_name}</p>
                     ${video.authors[0].verified === true ? `<img src="https://img.icons8.com/fluency/48/instagram-check-mark.png" class="w-5"/>` : ""}
                 </div>
-                <p></p>
+                <p class = "text-gray-400" >${video.others.views} views</p>
             </div>
         </div>
         `
