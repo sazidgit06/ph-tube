@@ -21,11 +21,25 @@ const loadVideos = () => {
     }
 }
 
+const activeclsremove = () => {
+    const activebtn = document.getElementsByClassName('active-btn');
+    for(const btn of activebtn){
+        btn.classList.remove('active');
+    }
+}
+
 // loadbsedoncategory
 const loadbsedoncategory = (id) => {
     fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
-    .then(res => res.json())
-    .then(data => displayVideos(data.category))
+        .then(res => res.json())
+        .then(data => {
+            // active cls remove korte hbe
+            activeclsremove();
+            // id onujayi btn active korte hbe
+            const activeBtn = document.getElementById(`btn-${id}`);
+            activeBtn.classList.add('active');
+            displayVideos(data.category);
+        })
 }
 
 // categories
@@ -35,9 +49,9 @@ const displayCategory = (data) => {
     for (const cat of data) {
         // console.log(cat.category);
         const buttoncontainer = document.createElement('div');
-        buttoncontainer.innerHTML = 
-        `
-            <button onclick="loadbsedoncategory(${cat.category_id})" class="btn">${cat.category}</button>
+        buttoncontainer.innerHTML =
+            `
+            <button id="btn-${cat.category_id}" onclick="loadbsedoncategory(${cat.category_id})" class="btn active-btn">${cat.category}</button>
         `
         categoryContainer.appendChild(buttoncontainer);
     }
@@ -55,7 +69,21 @@ const time = (num) => {
 // display videos
 const displayVideos = (videos) => {
     const videoContainer = document.getElementById('videos');
-    videoContainer.innerHTML = ""
+    videoContainer.innerHTML = "";
+
+    if (videos.length == 0) {
+        videoContainer.classList.remove('grid');
+        videoContainer.innerHTML = `
+            <div class="min-h-[400px] flex flex-col gap-5 justify-center items-center">
+                <img src="assets/icon.png"  />
+                <h2 class="text-center text-xl font-bold">No content here in this category</h2>
+            </div>
+        `;
+        return;
+    } else {
+        videoContainer.classList.add('grid');
+    }
+
     for (const video of videos) {
         console.log(video);
         const div = document.createElement('div');
@@ -67,9 +95,8 @@ const displayVideos = (videos) => {
                 class="h-full w-full object-cover"
                 alt="Shoes" />
 
-                ${
-                    video.others.posted_date?.length === 0 ? "" : `<span class="absolute right-2 bottom-2 bg-black text-white rounded p-1 text-xs">${time(video.others.posted_date)}</span>`
-                }
+                ${video.others.posted_date?.length === 0 ? "" : `<span class="absolute right-2 bottom-2 bg-black text-white rounded p-1 text-xs">${time(video.others.posted_date)}</span>`
+            }
          
         </figure>
         <div class="px-0 py-2 flex gap-2">
