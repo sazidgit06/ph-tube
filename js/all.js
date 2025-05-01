@@ -63,7 +63,26 @@ const time = (num) => {
     const hour = parseInt(num / 3600);
     const rem = num % 3600;
     const minute = parseInt(rem / 60);
-    return `${hour} hrs ${minute} min ago`
+    return `${hour} hrs ${minute} min ago`;
+}
+
+// loadmodal
+
+const loaddetails = async (videoid) => {
+    const res = await fetch(`https://openapi.programming-hero.com/api/phero-tube/video/${videoid}`)
+    const data = await res.json();
+    displayDetails(data.video)
+}
+
+function displayDetails(video) {
+    console.log(video);
+    const modalid = document.getElementById('modalid');
+    modalid.innerHTML = `
+        <img src="${video.thumbnail}"/>
+        <p class="pt-5 px-5">"${video.description}"</p>
+    `;
+
+    document.getElementById('myModal').showModal();
 }
 
 // display videos
@@ -89,7 +108,7 @@ const displayVideos = (videos) => {
         const div = document.createElement('div');
         div.classList.add('card');
         div.innerHTML = `
-        <figure class="h-[200px] relative">
+        <figure onclick="loaddetails('${video.video_id}')" class="h-[200px] relative cursor-pointer">
             <img
                 src=${video.thumbnail}
                 class="h-full w-full object-cover"
@@ -104,7 +123,7 @@ const displayVideos = (videos) => {
                 <img src=${video.authors[0].profile_picture} class="h-10 w-10 rounded-full object-cover" />
             </div>
             <div>
-                <h2 class="font-bold">${video.title}</h2>
+                <h2 onclick="loaddetails('${video.video_id}')" class="font-bold cursor-pointer">${video.title}</h2>
                 <div class="flex gap-2 items-center">
                     <p class="text-gray-400">${video.authors[0].profile_name}</p>
                     ${video.authors[0].verified === true ? `<img src="https://img.icons8.com/fluency/48/instagram-check-mark.png" class="w-5"/>` : ""}
